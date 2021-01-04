@@ -8,3 +8,10 @@ The basic bi LSTM gave a val loss of 0.0448. This can be improved by just increa
  <p align="center">
   <img src="./images/model1.png" />  
 </p> 
+
+Though on adding another LSTM layer and increasing the epochs to 50 the val loss reduced to 0.0307.  
+ <p align="center">
+  <img src="./images/model2.png" />  
+</p>   
+
+Increasing the epochs and maybe adding another LSTM layer will improve performance even more.

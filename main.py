@@ -85,3 +85,18 @@ bilstm_model.compile(optimizer='adam', loss='mean_squared_error')
 history = bilstm_model.fit(X_train, Y_train, batch_size=32, epochs=20, validation_split=0.2,
                            shuffle=False, verbose=2)
 # %%
+plt.plot(history.history['loss'], label="train")
+plt.plot(history.history['val_loss'], label="val")
+plt.legend()
+# %%
+y_pred = bilstm_model.predict(X_test)
+
+# %%
+y_train_inv = cnt_transformer.inverse_transform(Y_train.reshape(1, -1))
+y_test_inv = cnt_transformer.inverse_transform(Y_test.reshape(1, -1))
+y_pred_inv = cnt_transformer.inverse_transform(y_pred)
+# %%
+plt.plot(y_test_inv.flatten(), marker='.', label='true')
+plt.plot(y_pred_inv.flatten(), 'r', marker='.', label='predicted')
+plt.legend()
+# %%

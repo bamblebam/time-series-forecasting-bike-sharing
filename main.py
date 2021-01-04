@@ -6,6 +6,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import RobustScaler
 from pandas.plotting import register_matplotlib_converters
 from matplotlib import rcParams
 
@@ -36,4 +37,20 @@ sns.pointplot(x='hour', y='cnt', data=df)
 sns.pointplot(x='hour', y='cnt', data=df, hue='is_holiday')
 # %%
 sns.pointplot(x='day_of_week', y='cnt', data=df)
+# %%
+train_size = int(len(df)*0.8)
+train, test = df.iloc[:train_size], df.iloc[train_size:]
+print(train.shape, test.shape)
+# %%
+f_columns = ['t1', 't2', 'hum', 'wind_speed']
+f_transformer = RobustScaler()
+cnt_transformer = RobustScaler()
+f_transformer = f_transformer.fit(train[f_columns].to_numpy())
+cnt_transformer = cnt_transformer.fit(train[['cnt']].to_numpy())
+# %%
+train.loc[:, f_columns] = f_transformer.transform(train[f_columns].to_numpy())
+train['cnt'] = cnt_transformer.transform(train[['cnt']].to_numpy())
+# %%
+test.loc[:, f_columns] = f_transformer.transform(test[f_columns].to_numpy())
+test['cnt'] = cnt_transformer.transform(test[['cnt']].to_numpy())
 # %%

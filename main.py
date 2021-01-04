@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from keras import Sequential
-from keras.layers import Bidirectional, LSTM, Dense, Activation, Dropout
+from keras.layers import Bidirectional, LSTM, Dense, Activation, Dropout, TimeDistributed, Flatten
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -75,15 +75,17 @@ X_test, Y_test = create_dataset(test, test.cnt, TIME_STEPS)
 print(X_train.shape, Y_train.shape)
 # %%
 bilstm_model = Sequential([
-    Bidirectional(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2]))),
+    Bidirectional(LSTM(128, input_shape=(
+        X_train.shape[1], X_train.shape[2]), return_sequences=True)),
+    Bidirectional(LSTM(64)),
     Dropout(0.2),
     Dense(1)
 ])
 
 # %%
 bilstm_model.compile(optimizer='adam', loss='mean_squared_error')
-history = bilstm_model.fit(X_train, Y_train, batch_size=32, epochs=20, validation_split=0.2,
-                           shuffle=False, verbose=2)
+history = bilstm_model.fit(X_train, Y_train, batch_size=32, epochs=50, validation_split=0.2,
+                           shuffle=False, verbose=1)
 # %%
 plt.plot(history.history['loss'], label="train")
 plt.plot(history.history['val_loss'], label="val")
@@ -101,4 +103,6 @@ plt.plot(y_pred_inv.flatten(), 'r', marker='.', label='predicted')
 plt.legend()
 # %%
 bilstm_model.save("models/model1.h5")
+# %%
+tf.config.list_physical_devices('GPU')
 # %%

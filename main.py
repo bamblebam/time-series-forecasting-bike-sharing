@@ -2,6 +2,8 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from keras import Sequential
+from keras.layers import Bidirectional, LSTM, Dense, Activation, Dropout
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -71,4 +73,15 @@ TIME_STEPS = 24
 X_train, Y_train = create_dataset(train, train.cnt, TIME_STEPS)
 X_test, Y_test = create_dataset(test, test.cnt, TIME_STEPS)
 print(X_train.shape, Y_train.shape)
+# %%
+bilstm_model = Sequential([
+    Bidirectional(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2]))),
+    Dropout(0.2),
+    Dense(1)
+])
+
+# %%
+bilstm_model.compile(optimizer='adam', loss='mean_squared_error')
+history = bilstm_model.fit(X_train, Y_train, batch_size=32, epochs=20, validation_split=0.2,
+                           shuffle=False, verbose=2)
 # %%

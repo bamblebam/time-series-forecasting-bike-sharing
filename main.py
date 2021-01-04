@@ -65,4 +65,10 @@ def create_dataset(X, Y, time_steps=1):
         Ys.append(Y.iloc[i+time_steps])
     return np.array(Xs), np.array(Ys)
 
+
+# %%
+TIME_STEPS = 24
+X_train, Y_train = create_dataset(train, train.cnt, TIME_STEPS)
+X_test, Y_test = create_dataset(test, test.cnt, TIME_STEPS)
+print(X_train.shape, Y_train.shape)
 # %%

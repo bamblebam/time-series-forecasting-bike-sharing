@@ -100,3 +100,5 @@ plt.plot(y_test_inv.flatten(), marker='.', label='true')
 plt.plot(y_pred_inv.flatten(), 'r', marker='.', label='predicted')
 plt.legend()
 # %%
+bilstm_model.save("models/model1.h5")
+# %%

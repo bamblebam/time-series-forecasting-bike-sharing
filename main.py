@@ -54,3 +54,15 @@ train['cnt'] = cnt_transformer.transform(train[['cnt']].to_numpy())
 test.loc[:, f_columns] = f_transformer.transform(test[f_columns].to_numpy())
 test['cnt'] = cnt_transformer.transform(test[['cnt']].to_numpy())
 # %%
+train.head()
+# %%
+
+
+def create_dataset(X, Y, time_steps=1):
+    Xs, Ys = list(), list()
+    for i in range(len(X)-time_steps):
+        Xs.append(X.iloc[i:(i+time_steps)].to_numpy())
+        Ys.append(Y.iloc[i+time_steps])
+    return np.array(Xs), np.array(Ys)
+
+# %%
